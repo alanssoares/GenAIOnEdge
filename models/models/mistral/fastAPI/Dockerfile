@@ -14,8 +14,8 @@ RUN apt-get update && \
 RUN pip install --no-cache-dir ctransformers --no-binary ctransformers
 RUN pip install --no-cache-dir llama-cpp-python
 RUN pip install --no-cache-dir "fastapi[standard]"
-COPY mistralgguf-fast.py /app
+COPY mistral-fast.py /app
 COPY ./model /app/model
 VOLUME ["/data"]
-CMD ["python", "-m", "fastapi", "run", "mistralgguf-fast.py"]
+CMD ["python", "-m", "fastapi", "run", "mistral-fast.py"]
 

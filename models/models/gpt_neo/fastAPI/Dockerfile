@@ -16,9 +16,9 @@ RUN apt-get update && \
 
 # Install PyTorch (CPU version)
 RUN pip install --no-cache-dir torch
-Run pip install transformers
-Run pip install "fastapi[standard]"
-Copy gptneo-fast.py /app
-Copy model/ /app/model
+RUN pip install transformers
+RUN pip install "fastapi[standard]"
+COPY gptneo-fast.py /app
+COPY model/ /app/model
 CMD ["python", "-m", "fastapi", "run", "gptneo-fast.py"]
 

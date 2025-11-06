@@ -63,15 +63,52 @@ cd GenAIOnEdge
 Create the necessary directories and download your preferred model files:
 
 ```bash
-# Example for Llama 2 (adjust paths as needed)
+# Create model directories
 mkdir -p models/models/llama2/model
-# Download your GGUF model file to models/models/llama2/model/
-
-# Repeat for other models you want to use
 mkdir -p models/models/gpt_neo/model
 mkdir -p models/models/mistral/model
-mkdir -p models/models/internlm/model
+
+# Download your GGUF model files to the respective directories
+# For example:
+# - Place Llama 2 GGUF file in models/models/llama2/model/
+# - Place GPT-Neo model files in models/models/gpt_neo/model/
+# - Place Mistral GGUF file in models/models/mistral/model/
 ```
+
+### 3. Quick Setup with Automatic Model Download
+
+You can use the provided setup scripts to check your environment, prepare the system, and **automatically download test models**:
+
+**For Windows (Command Prompt - Recommended):**
+```cmd
+setup.bat
+```
+
+**For Windows (PowerShell):**
+```powershell
+# Use cmd to run the batch file for best compatibility
+cmd /c "setup.bat"
+# OR use the PowerShell version
+.\setup.ps1
+```
+
+**For Linux/macOS:**
+```bash
+chmod +x setup.sh
+./setup.sh
+```
+
+These scripts will:
+- ✅ Check if Docker and Docker Compose are installed
+- ✅ Create necessary model directories
+- ✅ Verify that model files are present
+- ✅ **Offer to download test models automatically** (~10GB total):
+  - **Llama 2 7B Chat (Q4_K_M)** - ~4GB
+  - **Mistral 7B Instruct (Q4_K_M)** - ~4GB  
+  - **Phi-3 Mini (Q4_K_M)** - ~2GB (as GPT-Neo alternative)
+- ✅ Provide next steps to run the system
+
+> **Note**: The automatic download will fetch smaller, quantized models that are perfect for testing and development. For production use, you may want to use larger, unquantized models.
 
 ## Project Structure
 
@@ -136,7 +173,43 @@ cd ../../../..
 
 ## Deployment Options
 
-### Option 1: Local Development with Docker Compose
+### Option 1: Docker Compose (Recommended for Testing)
+
+The easiest way to run the entire system locally is using Docker Compose with 3 pre-configured models:
+
+#### Prerequisites
+- Ensure you have model files in the respective directories:
+  - `models/models/llama2/model/` - Place your Llama 2 GGUF model file here
+  - `models/models/gpt_neo/model/` - Place your GPT-Neo model files here
+  - `models/models/mistral/model/` - Place your Mistral GGUF model file here
+
+#### Run with Docker Compose
+
+```bash
+# Build and start all services
+docker-compose up --build
+
+# Run in detached mode (background)
+docker-compose up -d --build
+
+# View logs
+docker-compose logs -f
+
+# Stop all services
+docker-compose down
+
+# Stop and remove volumes
+docker-compose down -v
+```
+
+#### Access the Application
+- **Frontend**: http://localhost:3000
+- **Proxy API**: http://localhost:8000
+- **Llama 2 Model**: http://localhost:8001
+- **GPT-Neo Model**: http://localhost:8002
+- **Mistral Model**: http://localhost:8003
+
+### Option 2: Individual Docker Containers
 
 For local development and testing, you can run services individually:
 
@@ -151,7 +224,7 @@ docker run -p 8001:8000 llama:amd64-1
 docker run -p 3000:80 frontend:amd64-1
 ```
 
-### Option 2: Kubernetes Deployment
+### Option 3: Kubernetes Deployment
 
 For production deployment on a Raspberry Pi cluster or any Kubernetes cluster:
 
